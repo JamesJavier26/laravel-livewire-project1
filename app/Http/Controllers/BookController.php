@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Enums\UserRole;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -12,6 +14,10 @@ class BookController extends Controller
      */
     public function index()
     {
+        if (Auth::user()->role !== UserRole::ADMIN) {
+        abort(403); // Forbidden
+        }
+
         $books = Book::all();
         return view('livewire.manage-books', compact('books'));
     }
@@ -72,5 +78,25 @@ class BookController extends Controller
         $book->delete();
 
         return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
+    }
+
+    public function showAvailableBooks()
+{
+    $books = Book::all();
+    return view('user.borrow-books', compact('books'));
+}
+
+    public function borrow(Book $book)
+    {
+        if (!$book->isAvailable()) {
+            abort(403, 'Book is already borrowed.');
+        }
+
+        $book->borrowings()->create([
+            'user_id' => auth()->id(),
+            'borrowed_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Book borrowed successfully!');
     }
 }

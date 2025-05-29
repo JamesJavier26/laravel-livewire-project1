@@ -9,7 +9,7 @@
             </a>
         </div>
 
-        <div class="bg-white dark:bg-zinc-800 shadow rounded-lg overflow-hidden">
+        <div wire:poll.500ms class="bg-white dark:bg-zinc-800 shadow rounded-lg overflow-hidden">
             <table class="min-w-full table-auto text-sm text-left">
                 <thead class="bg-gray-100 dark:bg-zinc-700">
                     <tr>
@@ -18,6 +18,8 @@
                         <th class="px-4 py-2 font-semibold text-gray-700 dark:text-white">Author</th>
                         <th class="px-4 py-2 font-semibold text-gray-700 dark:text-white">Published</th>
                         <th class="px-4 py-2 font-semibold text-gray-700 dark:text-white">Actions</th>
+                        <th class="px-4 py-2 font-semibold text-gray-700 dark:text-white">Status</th>
+                        <p class="text-green-600">Current time: {{ now() }}</p>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200 dark:divide-zinc-700">
@@ -27,6 +29,7 @@
                         <td class="px-4 py-2 text-gray-800 dark:text-white">{{ $book->title }}</td>
                         <td class="px-4 py-2 text-gray-800 dark:text-white">{{ $book->author }}</td>
                         <td class="px-4 py-2 text-gray-800 dark:text-white">{{ $book->published_year }}</td>
+                        <td class="px-4 py-2 text-gray-800 dark:text-white">{{ $book->isAvailable() ? 'Available' : 'Out' }}</td>
                         <td class="px-4 py-2">
                             <a href="{{ route('books.edit', $book) }}" class="text-blue-500 hover:underline">Edit</a>
                             <form action="{{ route('books.destroy', $book) }}" method="POST" class="inline">
