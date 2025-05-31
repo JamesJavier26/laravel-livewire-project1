@@ -81,10 +81,10 @@ class BookController extends Controller
     }
 
     public function showAvailableBooks()
-{
-    $books = Book::all();
-    return view('user.borrow-books', compact('books'));
-}
+    {
+        $books = Book::all();
+        return view('user.borrow-books', compact('books'));
+    }
 
     public function borrow(Book $book)
     {

@@ -7,7 +7,6 @@ use App\Livewire\ManageBooks;
 use App\Http\Controllers\BookController;
 use App\Enums\UserRole;
 
-
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
@@ -16,8 +15,8 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     $user = Auth::user();
 
-    if ($user->role === 'user') {
-        return view('user.dashboard');
+    if ($user->role === UserRole::USER) {
+        return view('dashboard');
     }
 
     return view('dashboard');
@@ -30,16 +29,15 @@ Route::middleware(['auth'])->group(function () {
     Volt::route('settings/profile', 'settings.profile')->name('settings.profile');
     Volt::route('settings/password', 'settings.password')->name('settings.password');
     Volt::route('settings/appearance', 'settings.appearance')->name('settings.appearance');
+
     Route::get('/borrow-books', [BookController::class, 'showAvailableBooks'])->name('borrow.books');
     Route::post('/borrow-books/{book}', [BookController::class, 'borrow'])->name('borrow.book');
-});
 
-
-Route::middleware(['auth'])->group(function () {
-    // Book management routes (admin-only logic is handled in controller)
-    Route::get('/manage-books', [BookController::class, 'index'])->name('manage-books');
+    // ✅ Updated: Use Livewire component directly
+    Route::get('/manage-books', ManageBooks::class)->name('manage-books');
+    
+    // Keep using BookController for resource routes like create/edit
     Route::resource('books', BookController::class);
 });
 
-
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
