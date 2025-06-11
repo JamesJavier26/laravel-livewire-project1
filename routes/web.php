@@ -32,6 +32,8 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/borrow-books', [BookController::class, 'showAvailableBooks'])->name('borrow.books');
     Route::post('/borrow-books/{book}', [BookController::class, 'borrow'])->name('borrow.book');
+    Route::get('/my-borrowed-books', [BookController::class, 'showReturnableBooks'])->name('borrowed.books');
+    Route::put('/books/{book}/return', [BookController::class, 'return'])->name('return.book');
 
     // ✅ Updated: Use Livewire component directly
     Route::get('/manage-books', ManageBooks::class)->name('manage-books');

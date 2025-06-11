@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         User::updateOrCreate(
-            ['email' => 'javier.james2601@gmail.com'], // Prevent duplicate on reseed
+            ['email' => 'javier.james2601@gmail.com'],
             [
                 'name' => 'James',
                 'password' => Hash::make('test12345'),

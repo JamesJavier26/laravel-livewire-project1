@@ -90,3 +90,23 @@
         </a>
     @endif
 @endauth
+
+@auth
+    @if (Auth::user()->role === \App\Enums\UserRole::USER)
+        <a href="{{ route('borrowed.books') }}"
+           class="{{ request()->routeIs('borrowed.books')
+               ? 'flex items-center py-2 text-sm font-medium rounded-md text-white bg-white/10'
+               : 'flex items-center py-2 text-sm font-medium rounded-md text-gray-300 hover:text-white hover:bg-white/10 hover:brightness-110 transition-all duration-200' }}">
+            
+            <span class="flex items-center ps-3">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                     viewBox="0 0 24 24" stroke-width="1.5"
+                     stroke="currentColor" class="w-5 h-5 mr-2">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M4.5 19.5l15-15m-15 0h15v15" />
+                </svg>
+                Return Books
+            </span>
+        </a>
+    @endif
+@endauth

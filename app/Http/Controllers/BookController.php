@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Borrowing;
 use App\Enums\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +16,7 @@ class BookController extends Controller
     public function index()
     {
         if (Auth::user()->role !== UserRole::ADMIN) {
-        abort(403); // Forbidden
+            abort(403); // Forbidden
         }
 
         $books = Book::all();
@@ -98,5 +99,35 @@ class BookController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Book borrowed successfully!');
+    }
+
+    public function return(Book $book)
+    {
+        $borrowing = $book->borrowings()
+            ->where('user_id', auth()->id())
+            ->whereNull('returned_at')
+            ->latest()
+            ->first();
+
+        if (!$borrowing) {
+            return redirect()->back()->with('error', 'You have not borrowed this book or it was already returned.');
+        }
+
+        $borrowing->update([
+            'returned_at' => now(),
+        ]);
+
+        return redirect()->back()->with('success', 'Book returned successfully!');
+    }
+
+    public function showReturnableBooks()
+    {
+        $borrowedBooks = Borrowing::with('book')
+            ->where('user_id', auth()->id())
+            ->whereNull('returned_at')
+            ->latest()
+            ->get();
+
+        return view('user.return-books', compact('borrowedBooks'));
     }
 }
