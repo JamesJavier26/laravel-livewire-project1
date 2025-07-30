@@ -44,7 +44,7 @@ class BookController extends Controller
 
         Book::create($request->all());
 
-        return redirect()->route('books.index')->with('success', 'Book created successfully.');
+        return redirect()->back()->with('success', 'Book created successfully.');
     }
 
     /**
@@ -68,7 +68,7 @@ class BookController extends Controller
 
         $book->update($request->all());
 
-        return redirect()->route('books.index')->with('success', 'Book updated successfully.');
+        return redirect()->back()->with('success', 'Book updated successfully.');
     }
 
     /**
@@ -78,7 +78,7 @@ class BookController extends Controller
     {
         $book->delete();
 
-        return redirect()->route('books.index')->with('success', 'Book deleted successfully.');
+        return redirect()->back()->with('success', 'Book deleted successfully.');
     }
 
     public function showAvailableBooks()
